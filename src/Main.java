@@ -9,9 +9,22 @@ public class Main {
         DatabaseManager.initializeDatabase();
         setupDarkTheme();
 
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            System.err.println("Uncaught exception in " + t.getName() + ":");
+            e.printStackTrace();
+        });
+
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame();
-            mainFrame.setVisible(true);
+            try {
+                System.out.println("Initializing MainFrame...");
+                MainFrame mainFrame = new MainFrame();
+                System.out.println("Setting MainFrame visible...");
+                mainFrame.setVisible(true);
+                System.out.println("MainFrame visible: " + mainFrame.isVisible());
+            } catch (Throwable t) {
+                System.err.println("EXCEPTION IN EDT:");
+                t.printStackTrace();
+            }
         });
     }
 
